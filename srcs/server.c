@@ -1,21 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   server.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hakahmed <hakahmed@student.42madrid.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/05/29 16:56:26 by hakahmed          #+#    #+#             */
+/*   Updated: 2023/05/29 16:59:48 by hakahmed         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
 
-#include "libft.h"
 #include "minitalk.h"
 
-// 128 64 32 16 8 4 2 1
-// 0000 0000
-//
-//
-//65 in binary : 0100 0001
-// original : 0000 0000
-//
+t_info	g_info = {128, 0};
 
-t_info g_info = {128, 0};
-
-void wbyte(void)
+void	wbyte(void)
 {
 	if (!g_info.flag)
 	{
@@ -26,7 +29,7 @@ void wbyte(void)
 	}
 }
 
-void b_one(int signal)
+void	b_one(int signal)
 {
 	(void) signal;
 	g_info.c = g_info.c | g_info.flag;
@@ -34,19 +37,21 @@ void b_one(int signal)
 	wbyte();
 }
 
-void b_zero(int signal)
+void	b_zero(int signal)
 {
 	(void) signal;
 	g_info.flag /= 2;
-	if (!g_info.flag)
 	wbyte();
 }
 
 int	main(void)
 {
-	pid_t pid = getpid();
+	pid_t	pid;
+
+	pid = getpid();
 	ft_printf("%u\n", pid);
-	while (1) {
+	while (1)
+	{
 		signal(B1, &b_one);
 		signal(B0, &b_zero);
 	}
